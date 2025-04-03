@@ -15,9 +15,35 @@
 
 ## Project Structure  
 ```
-src/main/java/com/njdge/chromatic3d       # Main application logic  
-src/main/java/com/njdge/chromatic3d/object # Experiment data and environment management  
-src/main/java/com/njdge/chromatic3d/spaces # RGB space visualization demos  
+Chromatic3D/
+├── README.md
+├── pom.xml
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── njdge/
+│   │   │           └── chromatic3d/
+│   │   │               ├── MainApplication.java
+│   │   │               ├── object/
+│   │   │               │   ├── ExperimentData.java
+│   │   │               │   └── EnvironmentManager.java
+│   │   │               └── spaces/
+│   │   │                   ├── RGBSpaceDemo.java
+│   │   │                   └── ColorSpaceVisualizer.java
+│   │   └── resources/
+│   │       └── application.properties
+│   └── test/
+│       ├── java/
+│       │   └── com/
+│       │       └── njdge/
+│       │           └── chromatic3d/
+│       │               └── MainApplicationTest.java
+│       └── resources/
+│           └── test-data.json
+└── pictures/
+    ├── a.png
+    └── b.png
 ```  
 
 ---  
