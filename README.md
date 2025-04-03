@@ -16,3 +16,6 @@ The Chromatic3D project is a Java-based application that visualizes RGB color sp
 
 ### Dependence
 - [Jzy3d](http://www.jzy3d.org/) - A Java library for 3D plotting.
+![Chromatic3D Screenshot (Mapping of Real Data)](a.png)
+![Chromatic3D Screenshot (RGB Cube Demo)](b.png)
+![Chromatic3D Data Analysis Output](a.png)
