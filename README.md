@@ -16,34 +16,63 @@
 ## Project Structure  
 ```
 Chromatic3D/
-├── README.md
-├── pom.xml
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/
-│   │   │       └── njdge/
-│   │   │           └── chromatic3d/
-│   │   │               ├── MainApplication.java
-│   │   │               ├── object/
-│   │   │               │   ├── ExperimentData.java
-│   │   │               │   └── EnvironmentManager.java
-│   │   │               └── spaces/
-│   │   │                   ├── RGBSpaceDemo.java
-│   │   │                   └── ColorSpaceVisualizer.java
-│   │   └── resources/
-│   │       └── application.properties
-│   └── test/
-│       ├── java/
-│       │   └── com/
-│       │       └── njdge/
-│       │           └── chromatic3d/
-│       │               └── MainApplicationTest.java
-│       └── resources/
-│           └── test-data.json
-└── pictures/
-    ├── a.png
-    └── b.png
+├─ README.md
+├─ pictures
+│  ├─ a.png
+│  └─ b.png
+├─ pom.xml
+├─ src
+│  └─ main
+│     ├─ java
+│     │  └─ com
+│     │     └─ njdge
+│     │        └─ chromatic3d
+│     │           ├─ CoordDemo.java
+│     │           ├─ Utils.java
+│     │           ├─ object
+│     │           │  ├─ EnvironmentManager.java
+│     │           │  └─ impl
+│     │           │     └─ ExperimentSet.java
+│     │           └─ spaces
+│     │              └─ RGBCubeDemo.java
+│     └─ resources
+│        ├─ META-INF
+│        │  └─ maven
+│        │     └─ archetype.xml
+│        └─ archetype-resources
+│           ├─ pom.xml
+│           └─ src
+│              ├─ main
+│              │  └─ java
+│              │     └─ App.java
+│              └─ test
+│                 └─ java
+│                    └─ AppTest.java
+└─ target
+   └─ classes
+      ├─ META-INF
+      │  └─ maven
+      │     └─ archetype.xml
+      ├─ archetype-resources
+      │  ├─ pom.xml
+      │  └─ src
+      │     ├─ main
+      │     │  └─ java
+      │     │     └─ App.java
+      │     └─ test
+      │        └─ java
+      │           └─ AppTest.java
+      └─ com
+         └─ njdge
+            └─ chromatic3d
+               ├─ CoordDemo.class
+               ├─ Utils.class
+               ├─ object
+               │  ├─ EnvironmentManager.class
+               │  └─ impl
+               │     └─ ExperimentSet.class
+               └─ spaces
+                  └─ RGBCubeDemo.class
 ```  
 
 ---  
