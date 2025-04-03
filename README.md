@@ -1,21 +1,36 @@
-## Chromatic3D Project
+# **Chromatic3D**  
 
-### Overview
-The Chromatic3D project is a Java-based application that visualizes RGB color spaces in a 3D environment. This project was primarily built for my high school chemical experiment needs, making it easier to visualize and read data. It uses the Jzy3d library to create and manipulate 3D charts and shapes.
+## Overview  
+**Chromatic3D** is a **Java-based** 3D visualization application designed to represent **RGB color spaces**. Originally developed to assist in **high school chemical experiments**, this project provides an intuitive way to visualize and interpret color data. It utilizes the **Jzy3d** library for generating and manipulating 3D charts and objects.  
 
-### Features
-- **3D RGB Cube Visualization**: Visualize RGB color spaces in a 3D cube.
-- **Experiment Sets**: Add and manage multiple experiment sets with different colors and points.
-- **Customizable Display**: Toggle various display options such as background, equations, gravity points, and more.
-- **Detailed Analysis**: Generate reports with detailed analysis of experiment sets including polygon area, distance from origin, and brightness percentage.
+---  
 
-### Project Structure
-- `src/main/java/com/njdge/chromatic3d`: Contains the main application code.
-- `src/main/java/com/njdge/chromatic3d/object`: Contains classes related to experiment sets and environment management.
-- `src/main/java/com/njdge/chromatic3d/spaces`: Contains demo classes for visualizing RGB spaces.
+## Features  
+- **3D RGB Cube Visualization** – Display RGB color spaces in a three-dimensional cube.  
+- **Experiment Set Management** – Add and manage multiple experiment sets with distinct colors and points.  
+- **Customizable Display** – Enable or disable elements such as background, equations, and gravity points.  
+- **Detailed Data Analysis** – Generate reports containing polygon area calculations, distance from the origin, and brightness percentages.  
 
-### Dependence
-- [Jzy3d](http://www.jzy3d.org/) - A Java library for 3D plotting.
-![Chromatic3D Screenshot (Mapping of Real Data)](a.png)
-![Chromatic3D Screenshot (RGB Cube Demo)](b.png)
-![Chromatic3D Data Analysis Output](a.png)
+---  
+
+## Project Structure  
+```
+src/main/java/com/njdge/chromatic3d       # Main application logic  
+src/main/java/com/njdge/chromatic3d/object # Experiment data and environment management  
+src/main/java/com/njdge/chromatic3d/spaces # RGB space visualization demos  
+```  
+
+---  
+
+## Dependencies  
+- **[Jzy3d](http://www.jzy3d.org/)** – A Java library for 3D plotting.  
+
+---  
+
+## Preview  
+
+### Mapping of Real Data  
+<img src="pictures/a.png" width="600"/>  
+
+### RGB Cube Demo  
+<img src="pictures/b.png" width="600"/>  
