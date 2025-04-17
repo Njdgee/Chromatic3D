@@ -6,7 +6,6 @@ import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -61,8 +60,8 @@ public class CoordDemo extends AWTAbstractAnalysis {
         ExperimentSet a = new ExperimentSet("0.15", new Color(255, 0, 0, 0.6f));   // Bright Red
         ExperimentSet b = new ExperimentSet("0.30", new Color(0, 255, 0, 0.6f));   // Bright Green
         ExperimentSet c = new ExperimentSet("0.45", new Color(0, 0, 255, 0.6f));   // Bright Blue
-//        ExperimentSet d = new ExperimentSet("0.60", new Color(255, 140, 0, 0.6f)); // Darker Orange
-//        ExperimentSet e = new ExperimentSet("0.75", new Color(128, 0, 128, 0.6f)); // Purple
+        ExperimentSet d = new ExperimentSet("0.60", new Color(255, 140, 0, 0.6f)); // Darker Orange
+        ExperimentSet e = new ExperimentSet("0.75", new Color(128, 0, 128, 0.6f)); // Purple
         ExperimentSet f = new ExperimentSet("0.90", new Color(0, 255, 255, 0.6f)); // Cyan
         ExperimentSet g = new ExperimentSet("1.05", new Color(255, 215, 0, 0.6f)); // Gold
 //        // Add points (test01)
@@ -100,14 +99,14 @@ public class CoordDemo extends AWTAbstractAnalysis {
         c.addPoint(average(new Coord3d(51, 103, 99), new Coord3d(17, 84, 90), new Coord3d(13, 78, 82))); //中性(28degreeC/pH 5.2)
         c.addPoint(average(new Coord3d(45, 65, 32), new Coord3d(46, 65, 30), new Coord3d(43, 62, 27))); //鹼性(19degreeC/pH 13.6)
         c.addPoint(average(new Coord3d(48, 53, 77), new Coord3d(47, 53, 74), new Coord3d(47, 51, 73)));//酸性(18degreeC/pH 0.3)
-//        //0.60g
-//        e.addPoint(average(new Coord3d(4, 57, 64), new Coord3d(4, 57, 63), new Coord3d(5, 60, 66))); //中性(28degreeC/pH 5.2)
-//        e.addPoint(average(new Coord3d(25, 45, 18), new Coord3d(26, 47, 19), new Coord3d(24, 44, 19))); //鹼性(19degreeC/pH 13.6)
-//        e.addPoint(average(new Coord3d(35, 39, 67), new Coord3d(36, 41, 70), new Coord3d(36, 40, 70)));//酸性(18degreeC/pH 0.3)
-//        //0.75g
-//        d.addPoint(average(new Coord3d(17, 73, 76), new Coord3d(17, 73, 76), new Coord3d(16, 72, 69))); //中性(28degreeC/pH 5.2)
-//        d.addPoint(average(new Coord3d(45, 64, 27), new Coord3d(46, 65, 28), new Coord3d(46, 65, 28))); //鹼性(19degreeC/pH 13.6)
-//        d.addPoint(average(new Coord3d(49, 55, 75), new Coord3d(49, 55, 76), new Coord3d(49, 56, 76)));//酸性(18degreeC/pH 0.3)
+        //0.60g
+        d.addPoint(average(new Coord3d(4, 57, 64), new Coord3d(4, 57, 63), new Coord3d(5, 60, 66))); //中性(28degreeC/pH 5.2)
+        d.addPoint(average(new Coord3d(25, 45, 18), new Coord3d(26, 47, 19), new Coord3d(24, 44, 19))); //鹼性(19degreeC/pH 13.6)
+        d.addPoint(average(new Coord3d(35, 39, 67), new Coord3d(36, 41, 70), new Coord3d(36, 40, 70)));//酸性(18degreeC/pH 0.3)
+        //0.75g
+        e.addPoint(average(new Coord3d(17, 73, 76), new Coord3d(17, 73, 76), new Coord3d(16, 72, 69))); //中性(28degreeC/pH 5.2)
+        e.addPoint(average(new Coord3d(45, 64, 27), new Coord3d(46, 65, 28), new Coord3d(46, 65, 28))); //鹼性(19degreeC/pH 13.6)
+        e.addPoint(average(new Coord3d(49, 55, 75), new Coord3d(49, 55, 76), new Coord3d(49, 56, 76)));//酸性(18degreeC/pH 0.3)
         //0.90g
         f.addPoint(average(new Coord3d(3, 49, 61), new Coord3d(4, 52, 65), new Coord3d(4, 52, 65))); //中性(28degreeC/pH 5.2)
         f.addPoint(average(new Coord3d(22, 35, 17), new Coord3d(21, 34, 15), new Coord3d(22, 35, 15))); //鹼性(19degreeC/pH 13.6)
@@ -120,8 +119,8 @@ public class CoordDemo extends AWTAbstractAnalysis {
         manager.addExperimentSet(a);
         manager.addExperimentSet(b);
         manager.addExperimentSet(c);
-//        manager.addExperimentSet(d);
-//        manager.addExperimentSet(e);
+        manager.addExperimentSet(d);
+        manager.addExperimentSet(e);
         manager.addExperimentSet(f);
         manager.addExperimentSet(g);
 
