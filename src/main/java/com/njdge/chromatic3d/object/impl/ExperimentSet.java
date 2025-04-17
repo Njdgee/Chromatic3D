@@ -26,6 +26,12 @@ public class ExperimentSet {
         points.add(p);
     }
 
+    public void addPoint(Coord3d coord) {
+        Point p = new Point(coord,color);
+        p.setWidth(10);
+        points.add(p);
+    }
+
     public void generatePolygon() {
         if (points.size() != 3) {
             throw new IllegalArgumentException("List must have exactly 3 elements.");

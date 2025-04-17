@@ -19,7 +19,7 @@ import static org.jzy3d.colors.Color.BLACK;
 @Data
 public class EnvironmentManager {
     private final List<ExperimentSet> experimentSets;
-    private boolean showBackground, showEquation, showDegrees, showDistance, showGravityPoint,showDistanceText,showMovePath,showName = true;
+    private boolean showBackground, showEquation, showDegrees, showDistance, showGravityPoint,showDistanceText,showMovePath,showName,showAxisLine = true;
     private float backgroundAlpha = 0.5f;
 
     public EnvironmentManager() {
@@ -54,7 +54,7 @@ public class EnvironmentManager {
 
             if (showName) {
                 Coord3d gravityPoint = experimentSet.getGravityPoint();
-                DrawableText text = new DrawableText(experimentSet.getName(), gravityPoint.add(10,10,0), BLACK);
+                DrawableText text = new DrawableText(experimentSet.getName(), gravityPoint.add(3,3,0), BLACK);
                 Font font = new Font("Arial", Font.TimesRoman_24.getStyle(), 24); // Change the size as needed
                 text.setDefaultFont(font);
                 shape.add(text);
@@ -66,7 +66,7 @@ public class EnvironmentManager {
         }
 
         if (showDegrees) {
-            DrawableText text = new DrawableText("Angle between polygons: " + getAngleBetweenPolygons(experimentSets.get(0), experimentSets.get(1)) + "°", new Coord3d(0, 0, 265), BLACK);
+            DrawableText text = new DrawableText("Angle between polygons: " + getAngleBetweenPolygons(experimentSets.get(0), experimentSets.get(1)) + "°", new Coord3d(0, 0, 120), BLACK);
             Font font = new Font("Arial", Font.TimesRoman_24.getStyle(), 24); // Change the size as needed
             text.setDefaultFont(font);
             shape.add(text);
@@ -104,10 +104,12 @@ public class EnvironmentManager {
                 shape.add(line);
             }
         }
+        if(showAxisLine) {
+            shape.add(createAxisLine(new Coord3d(0, 0, 0), new Coord3d(255, 0, 0))); // X axis
+            shape.add(createAxisLine(new Coord3d(0, 0, 0), new Coord3d(0, 255, 0))); // Y axis
+            shape.add(createAxisLine(new Coord3d(0, 0, 0), new Coord3d(0, 0, 255))); // Z axis
+        }
 
-        shape.add(createAxisLine(new Coord3d(0, 0, 0), new Coord3d(255, 0, 0))); // X axis
-        shape.add(createAxisLine(new Coord3d(0, 0, 0), new Coord3d(0, 255, 0))); // Y axis
-        shape.add(createAxisLine(new Coord3d(0, 0, 0), new Coord3d(0, 0, 255))); // Z axis
 
         return shape;
     }

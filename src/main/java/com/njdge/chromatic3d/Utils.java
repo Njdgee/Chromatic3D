@@ -1,11 +1,18 @@
 package com.njdge.chromatic3d;
 
+import com.njdge.chromatic3d.object.EnvironmentManager;
+import com.njdge.chromatic3d.object.impl.ExperimentSet;
+import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
+
+import java.util.List;
 
 import static org.jzy3d.colors.Color.BLACK;
 
@@ -58,5 +65,44 @@ public class Utils {
         Coord3d v2 = p3.sub(p1);
 
         return v1.cross(v2).normalizeTo(1.0F);
+    }
+    public static Coord3d  average(Coord3d a,Coord3d b ,Coord3d c) {
+        double x = (a.x + b.x + c.x)/3;
+        double y = (a.y + b.y + c.y)/3;
+        double z = (a.z + b.z + c.z)/3;
+
+        return new Coord3d(x,y,z);
+    }
+
+    public static void adjustBoundingBox(EnvironmentManager manager, Chart chart) {
+        List<ExperimentSet> experimentSets = manager.getExperimentSets();
+
+        // 初始化最小值和最大值
+        double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE, minZ = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE, maxY = Double.MIN_VALUE, maxZ = Double.MIN_VALUE;
+
+        // 遍歷所有點，計算範圍
+        for (ExperimentSet experimentSet : experimentSets) {
+            for (Point point : experimentSet.getPoints()) {
+                Coord3d coord = point.getCoord();
+                minX = Math.min(minX, coord.x);
+                minY = Math.min(minY, coord.y);
+                minZ = Math.min(minZ, coord.z);
+                maxX = Math.max(maxX, coord.x);
+                maxY = Math.max(maxY, coord.y);
+                maxZ = Math.max(maxZ, coord.z);
+            }
+        }
+
+        // 設置邊界，增加一點緩衝區以避免邊界過於緊湊
+        double padding = 10.0;
+        BoundingBox3d boundingBox = new BoundingBox3d(
+                minX - padding, maxX + padding,
+                minY - padding, maxY + padding,
+                minZ - padding, maxZ + padding
+        );
+
+        // 應用到圖表
+        chart.getView().setBoundManual(boundingBox);
     }
 }
