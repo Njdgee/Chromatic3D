@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.njdge.chromatic3d.Utils.*;
 import static org.jzy3d.colors.Color.BLACK;
+import static org.jzy3d.colors.Color.RED;
 
 @Data
 public class EnvironmentManager {
@@ -52,16 +53,17 @@ public class EnvironmentManager {
                 shape.add(point);
             }
 
+            for (Point point : experimentSet.getPoints()) {
+                shape.add(point);
+            }
+
             if (showName) {
                 Coord3d gravityPoint = experimentSet.getGravityPoint();
-                DrawableText text = new DrawableText(experimentSet.getName(), gravityPoint.add(3,3,0), BLACK);
+                // 調整文字位置，增加 Z 軸偏移量
+                DrawableText text = new DrawableText(experimentSet.getName(), gravityPoint.add(3, 3, 5), BLACK);
                 Font font = new Font("Arial", Font.TimesRoman_24.getStyle(), 24); // Change the size as needed
                 text.setDefaultFont(font);
                 shape.add(text);
-            }
-
-            for (Point point : experimentSet.getPoints()) {
-                shape.add(point);
             }
         }
 
@@ -74,7 +76,6 @@ public class EnvironmentManager {
 
         if (showDistance) {
             for (ExperimentSet experimentSet : experimentSets) {
-                // Create a line from the origin to the gravity point
                 Coord3d origin = new Coord3d(0, 0, 0);
                 Coord3d gravityPoint = experimentSet.getGravityPoint();
                 LineStrip line = new LineStrip();
@@ -84,7 +85,6 @@ public class EnvironmentManager {
                 shape.add(line);
 
                 if(showDistanceText) {
-                    // Add the distance text next to the arrow
                     DrawableText text = new DrawableText("Distance: " + getDistanceFromOrigin(experimentSet), gravityPoint.add(new Coord3d(10, 10, 0)), BLACK);
                     Font font = new Font("Arial", Font.TimesRoman_24.getStyle(), 24); // Change the size as needed
                     text.setDefaultFont(font);
@@ -95,11 +95,30 @@ public class EnvironmentManager {
         }
 
         if (showMovePath) {
-            for (int i = 0;i < 3;i ++) {
+            for (int i = 0; i < 3; i++) {
                 LineStrip line = new LineStrip();
+                Coord3d previousCoord = null;
+
                 for (ExperimentSet experimentSet : experimentSets) {
-                    line.add(new Point(experimentSet.getPoints().get(i).getCoord(), BLACK));
+                    Coord3d currentCoord = experimentSet.getPoints().get(i).getCoord();
+
+                    if (previousCoord != null) {
+                        if (currentCoord.y < previousCoord.y) {
+                            LineStrip redLine = new LineStrip();
+                            redLine.add(new Point(previousCoord, RED));
+                            redLine.add(new Point(currentCoord, RED));
+                            redLine.setColor(BLACK);
+                            redLine.setWidth(4);
+                            shape.add(redLine);
+                        } else {
+                            line.add(new Point(previousCoord, RED));
+                            line.add(new Point(currentCoord, RED));
+                        }
+                    }
+
+                    previousCoord = currentCoord; // 更新上一個節點
                 }
+
                 line.setWidth(4);
                 shape.add(line);
             }

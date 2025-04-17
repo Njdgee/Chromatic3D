@@ -57,13 +57,13 @@ public class CoordDemo extends AWTAbstractAnalysis {
         manager.setShowAxisLine(false);
 
         manager.setBackgroundAlpha(0.06f);
-        ExperimentSet a = new ExperimentSet("0.15", new Color(255, 0, 0, 0.6f));   // Bright Red
-        ExperimentSet b = new ExperimentSet("0.30", new Color(0, 255, 0, 0.6f));   // Bright Green
-        ExperimentSet c = new ExperimentSet("0.45", new Color(0, 0, 255, 0.6f));   // Bright Blue
-        ExperimentSet d = new ExperimentSet("0.60", new Color(255, 140, 0, 0.6f)); // Darker Orange
-        ExperimentSet e = new ExperimentSet("0.75", new Color(128, 0, 128, 0.6f)); // Purple
-        ExperimentSet f = new ExperimentSet("0.90", new Color(0, 255, 255, 0.6f)); // Cyan
-        ExperimentSet g = new ExperimentSet("1.05", new Color(255, 215, 0, 0.6f)); // Gold
+        ExperimentSet a = new ExperimentSet("0.15", new Color(255, 0, 0, 0.65f));   // Bright Red
+        ExperimentSet b = new ExperimentSet("0.30", new Color(0, 255, 0, 0.65f));   // Bright Green
+        ExperimentSet c = new ExperimentSet("0.45", new Color(0, 0, 255, 0.65f));   // Bright Blue
+        ExperimentSet d = new ExperimentSet("0.60", new Color(255, 140, 0, 0.65f)); // Darker Orange
+        ExperimentSet e = new ExperimentSet("0.75", new Color(128, 0, 128, 0.65f)); // Purple
+        ExperimentSet f = new ExperimentSet("0.90", new Color(0, 255, 255, 0.65f)); // Cyan
+        ExperimentSet g = new ExperimentSet("1.05", new Color(255, 215, 0, 0.65f)); // Gold
 //        // Add points (test01)
 //        a.addPoint(19, 52, 95);//中性(28degreeC/pH 7.5)
 //        a.addPoint(25, 56, 41);//鹼性(19degreeC/pH 13.6)
