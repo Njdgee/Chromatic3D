@@ -145,7 +145,9 @@ public class EnvironmentManager {
         double magnitude1 = normal1.distance(new Coord3d(0, 0, 0));
         double magnitude2 = normal2.distance(new Coord3d(0, 0, 0));
 
-        return Double.parseDouble(String.format("%.4f", Math.acos(dotProduct / (magnitude1 * magnitude2)) * (180.0 / Math.PI)));     }
+        return Double.parseDouble(String.format("%.4f", Math.acos(dotProduct / (magnitude1 * magnitude2)) * (180.0 / Math.PI)));
+    }
+
 
     public double getDistanceFromOrigin(ExperimentSet a) {
         return Double.parseDouble(String.format("%.4f", a.getGravityPoint().distance(new Coord3d(0, 0, 0))));
