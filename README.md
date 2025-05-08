@@ -103,6 +103,7 @@ Chromatic3D/
 
 ### Mapping of Real Data  
 <img src="pictures/demo.gif" width="600"/>  
+[View the Report](pictures/report.pdf)
 
 ### RGB Cube Demo  
 <img src="pictures/b.png" width="600"/>  
