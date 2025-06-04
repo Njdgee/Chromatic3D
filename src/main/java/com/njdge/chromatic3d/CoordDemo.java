@@ -6,13 +6,16 @@ import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
+import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 import java.util.List;
 
+import static com.njdge.chromatic3d.Predictor.*;
 import static com.njdge.chromatic3d.Utils.*;
 
 public class CoordDemo extends AWTAbstractAnalysis {
@@ -36,16 +39,37 @@ public class CoordDemo extends AWTAbstractAnalysis {
         chart.getAxisLayout().setXAxisLabel("Red");
         chart.getAxisLayout().setYAxisLabel("Green");
         chart.getAxisLayout().setZAxisLabel("Blue");
-        adjustBoundingBox(rgbCoord3D, chart);
+        if (rgbCoord3D.getType().equals(ChartType.SCALED_FIT)){
+            adjustBoundingBox(rgbCoord3D, chart);
+        }else if(rgbCoord3D.getType().equals(ChartType.ORIGINAL_SIZE)){
+            chart.getView().setBoundManual(new BoundingBox3d(0, 255, 0, 255, 0, 255));
+        }
 //        chart.getView().setBoundManual(new BoundingBox3d(0, 255, 0, 255, 0, 255));
         chart.getScene().getGraph().add(rgbCoord3D.getShape());
         chart.getView().setViewPositionMode(ViewPositionMode.FREE);
-        chart.getView().setViewPoint(new Coord3d(0.5, 0.5, 0.5), true);
+        chart.getView().setViewPoint(new Coord3d(0.4, 0.45, 0.56), true);
         System.out.println(generateReport(rgbCoord3D));
     }
 
     private static EnvironmentManager getRgbCoord3D() {
         EnvironmentManager manager = new EnvironmentManager();
+        //法向量 Profile
+//        manager.setType(ChartType.SCALED_FIT_WITH_ORIGIN);
+//        manager.setShowPolygon(false);
+//        manager.setShowBackground(false);
+//        manager.setShowEquation(false);
+//        manager.setShowDegrees(true);
+//        manager.setShowDistance(false);
+//        manager.setShowDistanceText(false);
+//        manager.setShowGravityPoint(false);
+//        manager.setShowMovePath(false);
+//        manager.setShowName(false);
+//        manager.setShowAxisLine(false);
+//        manager.setShowNormalVector(true);
+//        manager.setBackgroundAlpha(0.06f);
+        //假想面 Profile
+        manager.setType(ChartType.ORIGINAL_SIZE);
+        manager.setShowPolygon(true);
         manager.setShowBackground(false);
         manager.setShowEquation(false);
         manager.setShowDegrees(true);
@@ -55,15 +79,11 @@ public class CoordDemo extends AWTAbstractAnalysis {
         manager.setShowMovePath(true);
         manager.setShowName(true);
         manager.setShowAxisLine(false);
+        manager.setShowNormalVector(false);
+        manager.setShowPredict(true);
+//        manager.setBackgroundAlpha(0.06f);
+        manager.setPredict(0.5,3);
 
-        manager.setBackgroundAlpha(0.06f);
-        ExperimentSet a = new ExperimentSet("0.50", new Color(255, 0, 0, 0.65f));   // Bright Red
-        ExperimentSet b = new ExperimentSet("0.60", new Color(0, 255, 0, 0.65f));   // Bright Green
-        ExperimentSet c = new ExperimentSet("0.70", new Color(0, 0, 255, 0.65f));   // Bright Blue
-        ExperimentSet d = new ExperimentSet("0.80", new Color(255, 140, 0, 0.65f)); // Darker Orange
-        ExperimentSet e = new ExperimentSet("0.90", new Color(128, 0, 128, 0.65f)); // Purple
-        ExperimentSet f = new ExperimentSet("1.00", new Color(0, 255, 255, 0.65f)); // Cyan
-        ExperimentSet g = new ExperimentSet("1.10", new Color(255, 215, 0, 0.65f)); // Gold
 //        // Add points (test01)
 //        a.addPoint(19, 52, 95);//中性(28degreeC/pH 7.5)
 //        a.addPoint(25, 56, 41);//鹼性(19degreeC/pH 13.6)
@@ -87,6 +107,13 @@ public class CoordDemo extends AWTAbstractAnalysis {
 //        c.addPoint(108, 27, 28);//酸性(18degreeC/pH 0.3)
 //
 //        // Add points (test03)
+//        ExperimentSet a = new ExperimentSet("0.15", new Color(255, 0, 0, 0.65f));   // Bright Red
+//        ExperimentSet b = new ExperimentSet("0.30", new Color(0, 255, 0, 0.65f));   // Bright Green
+//        ExperimentSet c = new ExperimentSet("0.45", new Color(0, 0, 255, 0.65f));   // Bright Blue
+//        ExperimentSet d = new ExperimentSet("0.60", new Color(255, 140, 0, 0.65f)); // Darker Orange
+//        ExperimentSet e = new ExperimentSet("0.75", new Color(128, 0, 128, 0.65f)); // Purple
+//        ExperimentSet f = new ExperimentSet("0.90", new Color(0, 255, 255, 0.65f)); // Cyan
+//        ExperimentSet g = new ExperimentSet("1.05", new Color(255, 215, 0, 0.65f)); // Gold
 //        //0.15g
 //        a.addPoint(average(new Coord3d(66, 113, 98), new Coord3d(69, 114, 99), new Coord3d(68, 115, 99)));//中性(28degreeC/pH 7.5)
 //        a.addPoint(average(new Coord3d(87, 108, 68), new Coord3d(89, 110, 69), new Coord3d(89, 111, 70)));//鹼性(19degreeC/pH 13.6)
@@ -124,6 +151,13 @@ public class CoordDemo extends AWTAbstractAnalysis {
 //        manager.addExperimentSet(f);
 //        manager.addExperimentSet(g);
         // Add points (test04)
+        ExperimentSet a = new ExperimentSet("0.50", new Color(255, 0, 0, 0.65f));   // Bright Red
+        ExperimentSet b = new ExperimentSet("0.60", new Color(0, 255, 0, 0.65f));   // Bright Green
+        ExperimentSet c = new ExperimentSet("0.70", new Color(0, 0, 255, 0.65f));   // Bright Blue
+        ExperimentSet d = new ExperimentSet("0.80", new Color(255, 140, 0, 0.65f)); // Darker Orange
+        ExperimentSet e = new ExperimentSet("0.90", new Color(128, 0, 128, 0.65f)); // Purple
+        ExperimentSet f = new ExperimentSet("1.00", new Color(0, 255, 255, 0.65f)); // Cyan
+        ExperimentSet g = new ExperimentSet("1.10", new Color(255, 215, 0, 0.65f)); // Gold
         //0.50g
         a.addPoint(average(new Coord3d(61, 105, 118), new Coord3d(58, 104, 120), new Coord3d(55, 100, 118)));//中性(28degreeC/pH 7.5)
         a.addPoint(average(new Coord3d(75, 93, 73), new Coord3d(76, 95, 74), new Coord3d(79, 97, 78)));//鹼性(19degreeC/pH 13.6)
@@ -152,7 +186,6 @@ public class CoordDemo extends AWTAbstractAnalysis {
         g.addPoint(average(new Coord3d(20, 31, 77), new Coord3d(20, 30, 78), new Coord3d(25, 37, 84))); //中性(28degreeC/pH 5.2)
         g.addPoint(average(new Coord3d(26, 31, 25), new Coord3d(24, 39, 24), new Coord3d(28, 41, 25))); //鹼性(19degreeC/pH 13.6)
         g.addPoint(average(new Coord3d(107, 31, 68), new Coord3d(113, 35, 71), new Coord3d(111, 32, 70)));//酸性(18degreeC/pH 0.3)
-
         manager.addExperimentSet(a);
         manager.addExperimentSet(b);
         manager.addExperimentSet(c);
@@ -196,25 +229,10 @@ public class CoordDemo extends AWTAbstractAnalysis {
             }
         }
         report.append("--------------------------------\n");
-        int count = 0;
-        double totalCosTheta = 0.0;
-        double totalAngle = 0.0;
 
-        for (int i = 0; i < experimentSets.size(); i++) {
-            for (int j = i + 1; j < experimentSets.size(); j++) {
-                double angle = manager.getAngleBetweenPolygons(experimentSets.get(i), experimentSets.get(j));
-                double cosTheta = Math.cos(Math.toRadians(angle));
-                totalCosTheta += cosTheta;
-                totalAngle += angle;
-                count++;
-            }
-        }
 
-        double averageCosTheta = count > 0 ? totalCosTheta / count : 0;
-        double averageAngle = count > 0 ? totalAngle / count : 0;
-
-        report.append("Average Cos Theta for all combinations: ").append(averageCosTheta).append("\n");
-        report.append("Average Angle for all combinations: ").append(averageAngle).append(" degrees\n");
+        report.append("Average Cos Theta for all combinations: ").append(manager.getAverageCosTheta()).append("\n");
+        report.append("Average Angle for all combinations: ").append(manager.getAverageAngle()).append(" degrees\n");
         report.append("================================\n");
 
         return report.toString();
