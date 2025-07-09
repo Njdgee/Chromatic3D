@@ -53,7 +53,7 @@ public class Utils {
     public static String getEquation(Polygon polygon) {
         Coord3d normal = calculateNormal(polygon);
         Coord3d pointCoord = polygon.getPoints().get(0).getCoord();
-        return String.format("%.3fx %.3fy %.3fz = %.3f", normal.x, normal.y, normal.z, normal.dot(pointCoord));
+        return String.format("%+.3fx %+.3fy %+.3fz = %.3f", normal.x, normal.y, normal.z, normal.dot(pointCoord));
     }
 
     public static Coord3d calculateNormal(Polygon polygon) {

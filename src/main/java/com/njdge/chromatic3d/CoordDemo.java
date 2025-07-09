@@ -34,6 +34,7 @@ public class CoordDemo extends AWTAbstractAnalysis {
 
         // Create a chart
         chart = AWTChartFactory.chart(Quality.Advanced());
+        new ViewpointAdaptor(chart); // Start monitoring the viewpoint
         Font font = new Font("Arial", Font.TimesRoman_24.getStyle(), 24); // Change the size as needed
         chart.getView().getAxis().getLayout().setFont(font);
         chart.getAxisLayout().setXAxisLabel("Red");
@@ -47,7 +48,7 @@ public class CoordDemo extends AWTAbstractAnalysis {
 //        chart.getView().setBoundManual(new BoundingBox3d(0, 255, 0, 255, 0, 255));
         chart.getScene().getGraph().add(rgbCoord3D.getShape());
         chart.getView().setViewPositionMode(ViewPositionMode.FREE);
-        chart.getView().setViewPoint(new Coord3d(0.4, 0.45, 0.56), true);
+        chart.getView().setViewPoint(new Coord3d(0.7899, 0.53, 87.179), true);
         System.out.println(generateReport(rgbCoord3D));
     }
 
@@ -68,7 +69,7 @@ public class CoordDemo extends AWTAbstractAnalysis {
 //        manager.setShowNormalVector(true);
 //        manager.setBackgroundAlpha(0.06f);
         //假想面 Profile
-        manager.setType(ChartType.ORIGINAL_SIZE);
+        manager.setType(ChartType.SCALED_FIT);
         manager.setShowPolygon(true);
         manager.setShowBackground(false);
         manager.setShowEquation(false);
@@ -81,8 +82,10 @@ public class CoordDemo extends AWTAbstractAnalysis {
         manager.setShowAxisLine(false);
         manager.setShowNormalVector(false);
         manager.setShowPredict(true);
+        manager.setShowCross(false);
+        manager.setShowPredictColor(false);
 //        manager.setBackgroundAlpha(0.06f);
-        manager.setPredict(0.5,3);
+        manager.setPredict(0.9,4);
 
 //        // Add points (test01)
 //        a.addPoint(19, 52, 95);//中性(28degreeC/pH 7.5)
@@ -174,7 +177,7 @@ public class CoordDemo extends AWTAbstractAnalysis {
         d.addPoint(average(new Coord3d(42, 78, 110), new Coord3d(49, 84, 114), new Coord3d(44, 79, 110))); //中性(28degreeC/pH 5.2)
         d.addPoint(average(new Coord3d(67, 85, 63), new Coord3d(62, 81, 63), new Coord3d(59, 77, 56))); //鹼性(19degreeC/pH 13.6)
         d.addPoint(average(new Coord3d(119, 71, 96), new Coord3d(116, 68, 93), new Coord3d(120, 70, 97)));//酸性(18degreeC/pH 0.3)
-        //0.90g
+//        //0.90g
         e.addPoint(average(new Coord3d(41, 66, 103), new Coord3d(40, 70, 110), new Coord3d(44, 69, 108))); //中性(28degreeC/pH 5.2)
         e.addPoint(average(new Coord3d(52, 67, 46), new Coord3d(55, 70, 49), new Coord3d(52, 68, 47))); //鹼性(19degreeC/pH 13.6)
         e.addPoint(average(new Coord3d(102, 50, 76), new Coord3d(112, 55, 82), new Coord3d(112, 56, 84)));//酸性(18degreeC/pH 0.3)
@@ -202,6 +205,13 @@ public class CoordDemo extends AWTAbstractAnalysis {
         StringBuilder report = new StringBuilder();
         report.append("Experiment Set Analysis Report\n");
         report.append("================================\n");
+        for (ExperimentSet experimentSet : experimentSets) {
+            report.append("Name: ").append(experimentSet.getName()).append("\n");
+            for (Point point : experimentSet.getPoints()) {
+                report.append("Point: ").append(point.getCoord().toString()).append("\n");
+            }
+        }
+        report.append("================================\n");
 
         for (ExperimentSet experimentSet : experimentSets) {
             report.append("Experiment Set: ").append(experimentSet.getName()).append("\n");
@@ -211,21 +221,21 @@ public class CoordDemo extends AWTAbstractAnalysis {
             report.append("Polygon Area: ").append(manager.getPolygonArea(experimentSet)).append("\n");
             report.append("Distance from Origin: ").append(manager.getDistanceFromOrigin(experimentSet)).append("\n");
             report.append("Brightness Percentage: ").append(manager.getBrightnessPercentage(experimentSet)).append("%\n");
-            // Add other calculations here as needed
             report.append("--------------------------------\n");
         }
         for (int i = 0; i < experimentSets.size(); i++) {
-            if (i + 1 < experimentSets.size()) {
-                int j = i + 1;
-                report.append("Angles between " + experimentSets.get(i).getName() + " and " + experimentSets.get(j).getName() + ": ").append(manager.getAngleBetweenPolygons(experimentSets.get(i), experimentSets.get(i + 1))).append("degrees\n");
+            for (int j = i + 1; j < experimentSets.size(); j++) {
+                report.append("Angles between " + experimentSets.get(i).getName() + " and " + experimentSets.get(j).getName() + ": ")
+                        .append(manager.getAngleBetweenPolygons(experimentSets.get(i), experimentSets.get(j)))
+                        .append(" degrees\n");
             }
         }
         report.append("--------------------------------\n");
 
         for (int i = 0; i < experimentSets.size(); i++) {
-            if (i + 1 < experimentSets.size()) {
-                int j = i + 1;
-                report.append("Cos Theta between " + experimentSets.get(i).getName() + " and " + experimentSets.get(j).getName() + ": ").append(Math.abs(Math.cos(Math.toRadians(manager.getAngleBetweenPolygons(experimentSets.get(i), experimentSets.get(i + 1)))))).append("\n");
+            for (int j = i + 1; j < experimentSets.size(); j++) {
+                report.append("Cos Theta between " + experimentSets.get(i).getName() + " and " + experimentSets.get(j).getName() + ": ")
+                        .append(Math.abs(Math.cos(Math.toRadians(manager.getAngleBetweenPolygons(experimentSets.get(i), experimentSets.get(j)))))).append("\n");
             }
         }
         report.append("--------------------------------\n");

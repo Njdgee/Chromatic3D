@@ -1,11 +1,11 @@
 package com.njdge.chromatic3d.object;
 
 import com.njdge.chromatic3d.ChartType;
+import com.njdge.chromatic3d.Predictor;
 import com.njdge.chromatic3d.object.impl.ExperimentSet;
 import lombok.Data;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Vector3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.*;
 import org.jzy3d.plot3d.text.drawable.DrawableText;
@@ -21,7 +21,14 @@ import static org.jzy3d.colors.Color.RED;
 @Data
 public class EnvironmentManager {
     private final List<ExperimentSet> experimentSets;
-    private boolean showBackground, showPolygon, showEquation, showDegrees, showDistance, showGravityPoint, showDistanceText, showMovePath, showName, showAxisLine, showNormalVector,showPredict = true;
+    private boolean showBackground, showPolygon,
+            showEquation, showDegrees,
+            showDistance, showGravityPoint,
+            showDistanceText, showMovePath,
+            showName, showAxisLine,
+            showNormalVector,showPredict,
+            showCross,showPredictColor
+            = true;
     private ChartType type = ChartType.ORIGINAL_SIZE;
     private float backgroundAlpha = 0.5f;
     private Point predictPoint;
@@ -38,6 +45,21 @@ public class EnvironmentManager {
 
     public Shape getShape() {
         Shape shape = new Shape();
+        if (showPredictColor) {
+            for (double concentration = 0.1; concentration <= 2; concentration += 0.05) {
+                for (double pH = 0; pH <= 14; pH += 0.05) {
+                    int r = Predictor.clamp((int) Predictor.predictR(concentration, pH));
+                    int g = Predictor.clamp((int) Predictor.predictG(concentration, pH));
+                    int b = Predictor.clamp((int) Predictor.predictB(concentration, pH));
+
+                    Coord3d coord = new Coord3d(r, g, b);
+                    Color color = new Color(r / 255.0f, g / 255.0f, b / 255.0f);
+                    Point point = new Point(coord, color);
+                    point.setWidth(10);
+                    shape.add(point);
+                }
+            }
+        }
         if (showBackground) {
             shape.add(getBackground(backgroundAlpha));
         }
@@ -49,7 +71,7 @@ public class EnvironmentManager {
                 }
             }
             if (showEquation) {
-                DrawableText text = new DrawableText(getEquation(experimentSet.getPolygon()), experimentSet.getPolygon().getPoints().get(0).getCoord(), BLACK);
+                DrawableText text = new DrawableText(getEquation(experimentSet.getPolygon()), experimentSet.getPolygon().getPoints().get(0).getCoord().add(3,0,3), BLACK);
                 Font font = new Font("Arial", Font.TimesRoman_24.getStyle(), 24); // Change the size as needed
                 text.setDefaultFont(font);
                 shape.add(text);
@@ -62,7 +84,6 @@ public class EnvironmentManager {
             }
             if (showName) {
                 Coord3d gravityPoint = experimentSet.getGravityPoint();
-                // 調整文字位置，增加 Z 軸偏移量
                 DrawableText text = new DrawableText(experimentSet.getName(), gravityPoint.add(3, 3, 8), BLACK);
                 Font font = new Font("Arial", Font.TimesRoman_24.getStyle(), 24); // Change the size as needed
                 text.setDefaultFont(font);
@@ -70,7 +91,6 @@ public class EnvironmentManager {
             }
         }
 
-        //calculate average angle
 
         int count = 0;
         double totalCosTheta = 0.0;
@@ -138,7 +158,7 @@ public class EnvironmentManager {
                         }
                     }
 
-                    previousCoord = currentCoord; // 更新上一個節點
+                    previousCoord = currentCoord;
                 }
 
                 line.setWidth(4);
@@ -151,21 +171,84 @@ public class EnvironmentManager {
             shape.add(createAxisLine(new Coord3d(0, 0, 0), new Coord3d(0, 0, 255))); // Z axis
         }
 
+        if (showCross) {
+            Coord3d fixedPoint = new Coord3d(50, 60, 50);
+            for (ExperimentSet experimentSet : experimentSets) {
+                Polygon polygon = experimentSet.getPolygon();
+                if (polygon.getPoints().size() >= 3) {
+                    Coord3d p1 = polygon.getPoints().get(0).getCoord();
+                    Coord3d p2 = polygon.getPoints().get(1).getCoord();
+                    Coord3d p3 = polygon.getPoints().get(2).getCoord();
+
+                    Coord3d v1 = p2.sub(p1);
+                    Coord3d v2 = p3.sub(p1);
+
+                    Coord3d normal = v1.cross(v2).normalizeTo(1.0F);
+
+                    float len = 100;
+                    float d = -normal.dot(p1);
+                    float t = -(normal.dot(fixedPoint) + d) / normal.dot(normal);
+
+                    if (t > 0) {
+                        len = t;
+                    }
+                    Coord3d adjustedNormal = normal.normalizeTo(len);
+
+                    LineStrip normalVectorLine = new LineStrip();
+                    normalVectorLine.add(new Point(fixedPoint, RED)); // Start at fixedPoint
+                    normalVectorLine.add(new Point(fixedPoint.add(adjustedNormal), Color.RED)); // End at adjusted direction
+                    Point point = new Point(fixedPoint.add(adjustedNormal), BLACK, 10);
+                    normalVectorLine.setWidth(5);
+                    shape.add(normalVectorLine);
+                    shape.add(point);
+                }
+                if (experimentSets.size() == 2) {
+                    Polygon polygon1 = experimentSets.get(0).getPolygon();
+                    Polygon polygon2 = experimentSets.get(1).getPolygon();
+
+                    if (polygon1.getPoints().size() >= 3 && polygon2.getPoints().size() >= 3) {
+                        Coord3d p1_1 = polygon1.getPoints().get(0).getCoord();
+                        Coord3d p2_1 = polygon1.getPoints().get(1).getCoord();
+                        Coord3d p3_1 = polygon1.getPoints().get(2).getCoord();
+                        Coord3d v1_1 = p2_1.sub(p1_1);
+                        Coord3d v2_1 = p3_1.sub(p1_1);
+                        Coord3d normal1 = v1_1.cross(v2_1).normalizeTo(1.0F);
+
+                        Coord3d p1_2 = polygon2.getPoints().get(0).getCoord();
+                        Coord3d p2_2 = polygon2.getPoints().get(1).getCoord();
+                        Coord3d p3_2 = polygon2.getPoints().get(2).getCoord();
+                        Coord3d v1_2 = p2_2.sub(p1_2);
+                        Coord3d v2_2 = p3_2.sub(p1_2);
+                        Coord3d normal2 = v1_2.cross(v2_2).normalizeTo(1.0F);
+
+                        double dotProduct = normal1.dot(normal2);
+                        double magnitude1 = normal1.distance(new Coord3d(0, 0, 0));
+                        double magnitude2 = normal2.distance(new Coord3d(0, 0, 0));
+                        double angle = Math.acos(dotProduct / (magnitude1 * magnitude2)) * (180.0 / Math.PI);
+
+                        Coord3d midpoint = new Coord3d(50, 63, 56);
+                        DrawableText angleText = new DrawableText(String.format("Angle: %.2f°", angle), midpoint, RED);
+                        Font font = new Font("Arial", Font.TimesRoman_24.getStyle(), 24);
+                        angleText.setDefaultFont(font);
+                        shape.add(angleText);
+                    }
+                }
+            }
+        }
+
 
         if (showNormalVector) {
             for (int i = 0; i < experimentSets.size(); i++) {
                 Polygon polygon1 = experimentSets.get(i).getPolygon();
                 Coord3d normal1 = calculateNormal(polygon1).normalizeTo(100);
 
-                // Ensure the normal vector points to the first quadrant
                 double x1 = Math.abs(normal1.x);
                 double y1 = Math.abs(normal1.y);
                 double z1 = Math.abs(normal1.z);
-                Coord3d adjustedNormal1 = new Coord3d(x1, y1, z1);
+                Coord3d adjustedNormal1 = new Coord3d(x1, y1, z1).mul(40);
 
                 Coord3d origin = new Coord3d(0, 0, 0);
 
-                // Draw the first normal vector
                 LineStrip normalVectorLine1 = new LineStrip();
                 normalVectorLine1.add(new Point(origin, BLACK));
                 normalVectorLine1.add(new Point(adjustedNormal1, BLACK));
@@ -179,18 +262,15 @@ public class EnvironmentManager {
                 shape.add(point1);
                 shape.add(text);
 
-                // Compare with the next normal vector if it exists
                 if (i + 1 < experimentSets.size()) {
                     Polygon polygon2 = experimentSets.get(i + 1).getPolygon();
                     Coord3d normal2 = calculateNormal(polygon2).normalizeTo(100);
 
-                    // Ensure the second normal vector points to the first quadrant
                     double x2 = Math.abs(normal2.x);
                     double y2 = Math.abs(normal2.y);
                     double z2 = Math.abs(normal2.z);
                     Coord3d adjustedNormal2 = new Coord3d(x2, y2, z2);
 
-                    // Draw the second normal vector
                     LineStrip normalVectorLine2 = new LineStrip();
                     normalVectorLine2.add(new Point(origin, BLACK));
                     normalVectorLine2.add(new Point(adjustedNormal2, BLACK));
@@ -200,34 +280,28 @@ public class EnvironmentManager {
                     Point point2 = new Point(adjustedNormal2, experimentSets.get(i + 1).getColor(), 14);
                     shape.add(point2);
 
-                    // Calculate the angle between the two normal vectors
                     double dotProduct = adjustedNormal1.dot(adjustedNormal2);
                     double magnitude1 = adjustedNormal1.distance(origin);
                     double magnitude2 = adjustedNormal2.distance(origin);
                     double angle = Math.acos(dotProduct / (magnitude1 * magnitude2)) * (180.0 / Math.PI);
 
-                    // Generate random proportions for the arc endpoints
-                    double proportion1 = 0.4 + (0.5 * Math.random()); // Random value between 0.4 and 0.9
-                    double proportion2 = 0.4 + (0.5 * Math.random()); // Random value between 0.4 and 0.9
+                    double proportion1 = 0.4 + (0.5 * Math.random());
+                    double proportion2 = 0.4 + (0.5 * Math.random());
 
-                    // Calculate the scaled points
                     Coord3d scaledPoint1 = adjustedNormal1.mul(proportion1);
                     Coord3d scaledPoint2 = adjustedNormal2.mul(proportion2);
 
-                    // Generate an arc between the scaled points
                     LineStrip arc = new LineStrip();
-                    int arcPoints = 50; // Number of points to approximate the arc
+                    int arcPoints = 50;
                     for (int j = 0; j <= arcPoints; j++) {
                         double t = (double) j / arcPoints;
 
-                        // Interpolate between the two points using spherical linear interpolation (slerp)
                         Coord3d arcPoint = scaledPoint1.mul(1 - t).add(scaledPoint2.mul(t)).normalizeTo(100);
                         arc.add(new Point(arcPoint, new Color(1,0,0,0.3)));
                     }
                     arc.setWidth(4);
                     shape.add(arc);
 
-                    // Add a label at the midpoint of the arc
                     Coord3d midpoint = scaledPoint1.add(scaledPoint2).div(2).normalizeTo(100);
                     Point midpointPoint = new Point(midpoint, RED, 10);
                     DrawableText angleText = new DrawableText(String.format("%.2f°", angle), midpoint.add(0, 0.9, 0.8), RED);

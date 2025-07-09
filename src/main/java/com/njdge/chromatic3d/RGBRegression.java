@@ -40,19 +40,16 @@ public class RGBRegression {
         addSample(x, yR, yG, yB, 1.10, 13.6, 26.0, 37.0, 24.7);
         addSample(x, yR, yG, yB, 1.10, 0.3, 110.3, 32.7, 69.7);
 
-        // 建立三個模型
         double[] coefR = fit(x, yR);
         double[] coefG = fit(x, yG);
         double[] coefB = fit(x, yB);
 
-        // 輸出結果
         System.out.printf("R = %.2f * w + %.2f * pH + %.2f%n", coefR[0], coefR[1], coefR[2]);
         System.out.printf("G = %.2f * w + %.2f * pH + %.2f%n", coefG[0], coefG[1], coefG[2]);
         System.out.printf("B = %.2f * w + %.2f * pH + %.2f%n", coefB[0], coefB[1], coefB[2]);
 
-        // 示範預測
-        double w = 0.75;
-        double pH = 5.2;
+        double w = 0.90;
+        double pH = 4;
         int predR = predict(coefR, w, pH);
         int predG = predict(coefG, w, pH);
         int predB = predict(coefB, w, pH);
@@ -91,4 +88,6 @@ public class RGBRegression {
         double result = coef[0] * w + coef[1] * pH + coef[2];
         return Math.max(0, Math.min(255, (int) Math.round(result))); // Clamp to [0, 255]
     }
+
+
 }
